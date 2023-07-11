@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transcription</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #transcription {
+            color: red;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transcription de la parole</h1>
+    <div id="transcription"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var recognition = new webkitSpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'fr-FR';
+
+            recognition.onresult = function(event) {
+                var transcription = "";
+                for (var i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        transcription += event.results[i][0].transcript;
+                    }
+                }
+
+                $('#transcription').text(transcription);
+            };
+
+            $('#start-button').click(function() {
+                recognition.start();
+            });
+
+            $('#stop-button').click(function() {
+                recognition.stop();
+            });
+
+            $('#save-button').click(function() {
+                var transcript = $('#transcription').text();
+                $.post('/save', {transcript: transcript}, function(response) {
+                    console.log(response);
+                });
+            });
+        });
+    </script>
+
+    <button id="start-button">Démarrer la transcription</button>
+    <button id="stop-button">Arrêter la transcription</button>
+    <button id="save-button">Enregistrer la transcription</button>
+</body>
+</html>
