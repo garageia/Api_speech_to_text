@@ -9,7 +9,7 @@ import re
 import itertools
 from datetime import datetime
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "traffic-day-86c0cf212577.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "API KEY"
 
 app = Flask(__name__)
 
